@@ -16,14 +16,16 @@ public class Test {
     private Map<String,String> error;
 
     public boolean isValid(UserDto object) {
-        Predicate<UserDto> email = x -> EmailValidator.getInstance().isValid(x.getLogin());
+//
         Validator<UserDto> validator = Validator.of(object)
-                .validator(email,EMAIL_NOT_VALID,"Email is not valid");
+                .validator(u -> EmailValidator.getInstance().isValid(u.getLogin()),EMAIL_NOT_VALID,"Email is not valid")
+                .validator(u -> !u.getFirstName().isEmpty(),NAME_NOT_VALID,"First name is not allow to be empty.")
+                .validator(u -> !u.getFirstName().isEmpty(),LAST_NAME_NOT_VALID,"Last name is not allow to be empty.");
+
         if(!validator.isEmpty()) {
             error = validator.getContainer();
         }
         return validator.isEmpty();
-
     }
 
 
@@ -33,5 +35,7 @@ public class Test {
 
     static class ConstantValid {
         static final String EMAIL_NOT_VALID = "invalid.email";
+        static final String NAME_NOT_VALID = "invalid.first.name";
+        static final String LAST_NAME_NOT_VALID = "invalid.last.name";
     }
 }
