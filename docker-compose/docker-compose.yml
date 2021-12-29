@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  db:
+    container_name: postgres
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=das2632337
+      - POSTGRES_DB=postgres
+    ports:
+      - "6323:5432"
+    volumes:
+      - .:/docker-entrypoint-initdb.d
+      - ./pgdata:/var/lib/postgresql
+#TODO add image application
+#  app:
+#    container_name: war
+#    image: war
+#    depends_on:
+#      - db
+#    restart: always
+#    ports:
+#      - "8081:8081"

@@ -7,8 +7,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-import static com.hardziyevich.application.controller.servlet.ConstantServlet.UrlPath.LOGIN_PATH;
-import static com.hardziyevich.application.controller.servlet.ConstantServlet.UrlPath.LOGOUT_PATH;
+import static com.hardziyevich.application.controller.servlet.ConstantProperty.UrlPath.LOGIN_PATH;
+import static com.hardziyevich.application.controller.servlet.ConstantProperty.UrlPath.LOGOUT_PATH;
 
 
 @WebServlet(LOGOUT_PATH)

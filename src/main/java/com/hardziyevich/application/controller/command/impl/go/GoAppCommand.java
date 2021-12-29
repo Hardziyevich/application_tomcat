@@ -5,7 +5,7 @@ import com.hardziyevich.application.controller.command.Router;
 import com.hardziyevich.application.controller.servlet.JspHelper;
 import jakarta.servlet.http.HttpServletRequest;
 
-import static com.hardziyevich.application.controller.servlet.ConstantServlet.UrlPath.START_PATH;
+import static com.hardziyevich.application.controller.servlet.ConstantProperty.UrlPath.START_PATH;
 
 
 public class GoAppCommand implements Command {

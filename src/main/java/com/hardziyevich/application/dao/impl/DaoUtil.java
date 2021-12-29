@@ -9,7 +9,6 @@ import java.sql.SQLException;
 class DaoUtil {
 
     private DaoUtil() {
-        throw new UnsupportedOperationException();
     }
 
     static void setStatement(PreparedStatement preparedStatement, Object[] seq) throws SQLException {

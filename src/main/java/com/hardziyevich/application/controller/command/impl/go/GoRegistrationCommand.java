@@ -6,8 +6,8 @@ import com.hardziyevich.application.domain.entity.Role;
 import com.hardziyevich.application.controller.servlet.JspHelper;
 import jakarta.servlet.http.HttpServletRequest;
 
-import static com.hardziyevich.application.controller.servlet.ConstantServlet.UrlPath.REGISTRATION_PATH;
-import static com.hardziyevich.application.controller.servlet.ConstantServlet.UserAttribute.ROLES;
+import static com.hardziyevich.application.controller.servlet.ConstantProperty.UrlPath.REGISTRATION_PATH;
+import static com.hardziyevich.application.controller.servlet.ConstantProperty.UserAttribute.ROLES;
 
 public class GoRegistrationCommand implements Command {
     @Override

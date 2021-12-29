@@ -3,13 +3,11 @@ package com.hardziyevich.application.dao.impl;
 final class SqlRequest {
 
     private SqlRequest() {
-        throw new UnsupportedOperationException();
     }
 
     final static class Insert {
 
         public Insert() {
-            throw new UnsupportedOperationException();
         }
 
         static final String INSERT_TABLE = "INSERT INTO %s";
@@ -22,7 +20,6 @@ final class SqlRequest {
     final static class Tables {
 
         private Tables() {
-            throw new UnsupportedOperationException();
         }
 
         static final String TABLE_USERS = "component.users";
