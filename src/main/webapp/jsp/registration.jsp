@@ -6,8 +6,9 @@
     <title>Title</title>
 </head>
 <body>
-<jsp:useBean id="message" class="com.hardziyevich.application.validator.Test" scope="request"/>
+<jsp:useBean id="message" class="com.hardziyevich.application.controller.validator.UserValidator" scope="request"/>
 
+<c:url value="/command?command=go_registration" var="var"/>
 <form action="registration" method="post">
     <input type="hidden" name="command" value="registration" />
     <label for="name">First name:
@@ -43,7 +44,6 @@
         </c:forEach>
     </select><br>
     <button type="submit">registration</button>
-
 </form>
 </body>
 </html>
