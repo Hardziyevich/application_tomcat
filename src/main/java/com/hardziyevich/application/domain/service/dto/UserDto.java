@@ -4,14 +4,14 @@ public final class UserDto {
 
     private final String firstName;
     private final String lastName;
-    private final String login;
+    private final String email;
     private final String password;
     private final String type;
 
     private UserDto(UserDtoBuilder builder) {
         this.firstName = builder.firstName;
         this.lastName = builder.lastName;
-        this.login = builder.login;
+        this.email = builder.email;
         this.password = builder.password;
         this.type = builder.type;
     }
@@ -28,8 +28,8 @@ public final class UserDto {
         return this.lastName;
     }
 
-    public String getLogin() {
-        return this.login;
+    public String getEmail() {
+        return this.email;
     }
 
     public String getPassword() {
@@ -50,8 +50,8 @@ public final class UserDto {
         final Object thisLastName = this.getLastName();
         final Object otherLastName = other.getLastName();
         if (thisLastName == null ? otherLastName != null : !thisLastName.equals(otherLastName)) return false;
-        final Object thisLogin = this.getLogin();
-        final Object otherLogin = other.getLogin();
+        final Object thisLogin = this.getEmail();
+        final Object otherLogin = other.getEmail();
         if (thisLogin == null ? otherLogin != null : !thisLogin.equals(otherLogin)) return false;
         final Object thisPassword = this.getPassword();
         final Object otherPassword = other.getPassword();
@@ -67,7 +67,7 @@ public final class UserDto {
         int result = 1;
         result = result * PRIME + (firstName == null ? 0 : firstName.hashCode());
         result = result * PRIME + (lastName == null ? 0 : lastName.hashCode());
-        result = result * PRIME + (login == null ? 0 : login.hashCode());
+        result = result * PRIME + (email == null ? 0 : email.hashCode());
         result = result * PRIME + (password == null ? 0 : password.hashCode());
         result = result * PRIME + (type == null ? 0 : type.hashCode());
         return result;
@@ -77,7 +77,7 @@ public final class UserDto {
         StringBuilder sb = new StringBuilder("UserDto(firstName=")
                 .append(this.getFirstName())
                 .append(", lastName=").append(this.getLastName())
-                .append(", login=").append(this.getLogin())
+                .append(", login=").append(this.getEmail())
                 .append(", password=").append(this.getPassword())
                 .append(", type=").append(this.getType()).append(")");
         return sb.toString();
@@ -86,7 +86,7 @@ public final class UserDto {
     public static class UserDtoBuilder {
         private String firstName;
         private String lastName;
-        private String login;
+        private String email;
         private String password;
         private String type;
 
@@ -103,8 +103,8 @@ public final class UserDto {
             return this;
         }
 
-        public UserDtoBuilder login(String login) {
-            this.login = login;
+        public UserDtoBuilder email(String email) {
+            this.email = email;
             return this;
         }
 

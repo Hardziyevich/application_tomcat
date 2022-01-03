@@ -9,7 +9,7 @@ public class LoginUserDto {
 
     String firstName;
     String lastName;
-    String login;
+    String email;
     String type;
 
 }

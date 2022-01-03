@@ -9,12 +9,13 @@ public final class ConstantProperty {
         private UrlPath() { throw new UnsupportedOperationException();}
 
         public static final String GO_APP_PATH = "/command";
+        public static final String GO_REGISTRATION_PATH = "/command?command=go_registration";
         public static final String REGISTRATION_PATH = "/registration";
         public static final String START_PATH = "/start";
         public static final String LOGIN_PATH = "/login";
         public static final String LOGIN_ERROR_PATH = LOGIN_PATH + "?error&command=not_valid_registration";
         public static final String LOGOUT_PATH = "/logout";
-        public static final String REGISTRATION_ERROR_PATH = "?error=registration";
+        public static final String REGISTRATION_ERROR_PATH = "&error=registration";
         public static final String RESISTORS_PATH = "/resistors";
 
     }

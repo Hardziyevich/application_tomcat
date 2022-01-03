@@ -17,6 +17,11 @@ final class SqlRequest {
 
     }
 
+    final static class Select {
+        static final String SELECT_USERS = "SELECT id, first_name, last_name, email, password, type FROM component.users ";
+        static final String SELECT_USERS_EMAIL = "WHERE email =?";
+    }
+
     final static class Tables {
 
         private Tables() {

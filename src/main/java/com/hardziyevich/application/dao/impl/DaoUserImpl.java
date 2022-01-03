@@ -1,14 +1,17 @@
 package com.hardziyevich.application.dao.impl;
 
+import com.hardziyevich.application.dao.Specification;
 import com.hardziyevich.application.dao.connectionpool.ConnectionPool;
 import com.hardziyevich.application.dao.DaoUser;
+import com.hardziyevich.application.dao.mapper.impl.UserMapperDao;
 import com.hardziyevich.application.exception.DaoException;
 import com.hardziyevich.application.domain.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.math.BigInteger;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.hardziyevich.application.dao.impl.SqlRequest.Insert.INSERT_TABLE;
 import static com.hardziyevich.application.dao.impl.SqlRequest.Insert.INSERT_VALUE_USER;
@@ -47,9 +50,25 @@ public class DaoUserImpl implements DaoUser {
             result = statement.getUpdateCount() == 1;
         } catch (SQLException e) {
             log.warn("Can not create user {}", e.getMessage());
-            throw new DaoException(e.getMessage());
+            throw new DaoException(e);
         }
         return result;
+    }
+
+    @Override
+    public List<User> find(Specification specification) throws DaoException {
+        List<User> users = new ArrayList<>();
+        UserMapperDao userMapper = UserMapperDao.getInstance();
+        try (PreparedStatement preparedStatement = specification.searchFilter(connectionPool)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                users.add(userMapper.mapFrom(resultSet));
+            }
+        } catch (SQLException e) {
+            log.warn("Can not search user {}", e.getMessage());
+            throw new DaoException(e);
+        }
+        return users;
     }
 
     public static DaoUser getInstance(ConnectionPool connection) {

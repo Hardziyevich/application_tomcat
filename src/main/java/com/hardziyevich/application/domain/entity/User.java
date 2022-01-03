@@ -1,9 +1,9 @@
 package com.hardziyevich.application.domain.entity;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 
 public final class User {
-    private final BigInteger id;
+    private final BigDecimal id;
     private final String firstName;
     private final String lastName;
     private final String email;
@@ -23,7 +23,7 @@ public final class User {
         return new UserBuilder();
     }
 
-    public BigInteger getId() {
+    public BigDecimal getId() {
         return this.id;
     }
 
@@ -96,14 +96,14 @@ public final class User {
     }
 
     public static class UserBuilder {
-        private BigInteger id;
+        private BigDecimal id;
         private String firstName;
         private String lastName;
         private String email;
         private String password;
         private Role type;
 
-        public UserBuilder id(BigInteger id) {
+        public UserBuilder id(BigDecimal id) {
             this.id = id;
             return this;
         }
@@ -118,8 +118,8 @@ public final class User {
             return this;
         }
 
-        public UserBuilder login(String login) {
-            this.email = login;
+        public UserBuilder email(String email) {
+            this.email = email;
             return this;
         }
 

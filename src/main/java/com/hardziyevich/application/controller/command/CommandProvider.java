@@ -3,6 +3,7 @@ package com.hardziyevich.application.controller.command;
 import com.hardziyevich.application.controller.command.impl.error.ErrorCommand;
 import com.hardziyevich.application.controller.command.impl.RegistrationCommand;
 import com.hardziyevich.application.controller.command.impl.go.GoAppCommand;
+import com.hardziyevich.application.controller.command.impl.Locale;
 import com.hardziyevich.application.controller.command.impl.go.GoRegistrationCommand;
 
 import java.util.Arrays;
@@ -19,6 +20,7 @@ public enum CommandProvider {
         warehouse = new EnumMap<>(CommandType.class);
         warehouse.put(GO_APP,new GoAppCommand());
         warehouse.put(GO_REGISTRATION,new GoRegistrationCommand());
+        warehouse.put(LOCALE,new Locale());
         warehouse.put(REGISTRATION,new RegistrationCommand());
     }
 

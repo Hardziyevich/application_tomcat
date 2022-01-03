@@ -2,6 +2,7 @@ package DaoUser;
 
 import com.hardziyevich.application.dao.DaoFactory;
 import com.hardziyevich.application.dao.DaoUser;
+import com.hardziyevich.application.dao.impl.FindUserByEmailSpecification;
 import com.hardziyevich.application.domain.entity.Role;
 import com.hardziyevich.application.domain.entity.User;
 import com.hardziyevich.application.exception.DaoException;
@@ -13,11 +14,14 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.hardziyevich.application.dao.connectionpool.ConnectionPoolFabric.PropertiesFile.*;
 import static com.hardziyevich.application.dao.connectionpool.ConnectionPoolFabric.PropertiesFile.POOL_SIZE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Testcontainers
@@ -48,13 +52,34 @@ public class DaoUserImplTest {
 
     @Test
     void testCreteUser() throws DaoException{
+        //given
         User userTest = User.builder()
                 .firstName("pasha")
                 .lastName("test")
-                .login("test")
+                .email("test")
                 .password("test")
                 .type(Role.USER)
                 .build();
-        assertTrue(daoUserImpl.create(userTest));
+        //when
+        boolean result = daoUserImpl.create(userTest);
+        //then
+        assertTrue(result);
+    }
+
+    @Test
+    void testSearchByEmail() throws DaoException {
+        //given
+        User user = User.builder()
+                .id(BigDecimal.ONE)
+                .firstName("Pasha")
+                .lastName("Hardziyevich")
+                .email("myemail@gmail.com")
+                .password("123456")
+                .type(Role.ADMIN)
+                .build();
+        //when
+        List<User> result = daoUserImpl.find(new FindUserByEmailSpecification("myemail@gmail.com"));
+        //then
+        assertEquals(List.of(user),result);
     }
 }

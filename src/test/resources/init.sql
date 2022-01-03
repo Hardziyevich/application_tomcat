@@ -70,3 +70,6 @@ VALUES ('0402', 0.4, 0.2),
        ('0603', 0.6, 0.3),
        ('0805', 0.8, 0.5),
        ('1210', 1.2, 1.0);
+
+INSERT INTO component.users(first_name, last_name, email, password, type)
+VALUES ('Pasha','Hardziyevich','myemail@gmail.com','123456','admin');

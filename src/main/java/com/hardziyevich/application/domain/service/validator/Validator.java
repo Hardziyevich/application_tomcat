@@ -1,17 +1,18 @@
-package com.hardziyevich.application.controller.validator;
+package com.hardziyevich.application.domain.service.validator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
 public class Validator<T> {
 
     private final T object;
-    private final Map<String,String> container = new HashMap<>();
-    private static final Logger log = LoggerFactory.getLogger(Validator.class);
+    private final List<String> container = new ArrayList<>();
 
     private Validator(T object) {
         this.object = object;
@@ -21,10 +22,9 @@ public class Validator<T> {
         return new Validator<>(object);
     }
 
-    public Validator<T> validator(Predicate<T> predicate, String key, String message) {
+    public Validator<T> validator(Predicate<T> predicate, String key) {
         if(!predicate.test(object)) {
-            log.info(message);
-            container.put(key,message);
+            container.add(key);
         }
         return this;
     }
@@ -33,7 +33,7 @@ public class Validator<T> {
         return container.isEmpty();
     }
 
-    public Map<String, String> getContainer() {
+    public List<String> getContainer() {
         return container;
     }
 }

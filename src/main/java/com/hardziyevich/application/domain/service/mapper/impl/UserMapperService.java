@@ -3,14 +3,16 @@ package com.hardziyevich.application.domain.service.mapper.impl;
 import com.hardziyevich.application.domain.entity.Role;
 import com.hardziyevich.application.domain.entity.User;
 import com.hardziyevich.application.domain.service.dto.UserDto;
-import com.hardziyevich.application.domain.service.mapper.Mapper;
+import com.hardziyevich.application.domain.service.mapper.MapperService;
 import org.apache.commons.codec.binary.Base64;
 
 import java.nio.charset.StandardCharsets;
 
-public class UserMapper implements Mapper<UserDto, User> {
+public class UserMapperService implements MapperService<UserDto, User> {
 
-    private static final UserMapper instance = new UserMapper();
+    private static final UserMapperService instance = new UserMapperService();
+
+    private UserMapperService() {}
 
     @Override
     public User mapFrom(UserDto object) {
@@ -18,13 +20,13 @@ public class UserMapper implements Mapper<UserDto, User> {
         return User.builder()
                 .firstName(object.getFirstName())
                 .lastName(object.getLastName())
-                .login(object.getLogin())
+                .email(object.getEmail())
                 .password(encodePassword)
                 .type(Role.valueOf(object.getType()))
                 .build();
     }
 
-    public static UserMapper getInstance() {
+    public static UserMapperService getInstance() {
         return instance;
     }
 }

@@ -10,9 +10,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 
-@WebServlet(urlPatterns = {"/login", "/registration","/command"})
+@WebServlet(urlPatterns = {"/registration","/command"})
 public class MainServlet extends HttpServlet {
 
     private CommandProvider provide = CommandProvider.INSTANCE;
@@ -29,6 +30,8 @@ public class MainServlet extends HttpServlet {
 
     private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         System.out.println(req.getRequestURI() + "   request param ");
+        System.out.println(req.getHeader("Accept-Language"));
+        req.getParameterMap().entrySet().forEach(e -> System.out.println(e.getKey() + " " + Arrays.toString(e.getValue())));
         System.out.println(req.getMethod());
         String param = req.getParameter("command");
         Command command = provide.getCommand(param);

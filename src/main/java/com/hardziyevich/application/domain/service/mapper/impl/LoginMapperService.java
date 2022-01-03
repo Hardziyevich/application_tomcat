@@ -2,23 +2,23 @@ package com.hardziyevich.application.domain.service.mapper.impl;
 
 import com.hardziyevich.application.domain.entity.User;
 import com.hardziyevich.application.domain.service.dto.LoginUserDto;
-import com.hardziyevich.application.domain.service.mapper.Mapper;
+import com.hardziyevich.application.domain.service.mapper.MapperService;
 
-public class LoginMapper implements Mapper<User, LoginUserDto> {
+public class LoginMapperService implements MapperService<User, LoginUserDto> {
 
-    private static final LoginMapper instance = new LoginMapper();
+    private static final LoginMapperService instance = new LoginMapperService();
 
     @Override
     public LoginUserDto mapFrom(User object) {
         return LoginUserDto.builder()
                 .firstName(object.getFirstName())
                 .lastName(object.getLastName())
-                .login(object.getEmail())
+                .email(object.getEmail())
                 .type(object.getType().toString())
                 .build();
     }
 
-    public static LoginMapper getInstance() {
+    public static LoginMapperService getInstance() {
         return instance;
     }
 }
