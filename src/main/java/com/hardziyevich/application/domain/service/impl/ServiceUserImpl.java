@@ -26,7 +26,7 @@ import static com.hardziyevich.application.domain.service.validator.ConstantVali
 
 public class ServiceUserImpl implements ServiceUser {
 
-    private static final Logger log = LoggerFactory.getLogger(DaoUserImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(ServiceUserImpl.class);
 
     private static ServiceUser instance;
 
@@ -34,7 +34,7 @@ public class ServiceUserImpl implements ServiceUser {
     private final UserMapperService userMapper = UserMapperService.getInstance();
     private final LoginMapperService loginMapper = LoginMapperService.getInstance();
 
-    ServiceUserImpl(DaoUser daoUser) {
+    private ServiceUserImpl(DaoUser daoUser) {
         this.daoUser = daoUser;
     }
 
