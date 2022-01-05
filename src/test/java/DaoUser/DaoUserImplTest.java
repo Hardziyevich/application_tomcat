@@ -2,19 +2,16 @@ package DaoUser;
 
 import com.hardziyevich.application.dao.DaoFactory;
 import com.hardziyevich.application.dao.DaoUser;
-import com.hardziyevich.application.dao.impl.FindUserByEmailSpecification;
 import com.hardziyevich.application.domain.entity.Role;
 import com.hardziyevich.application.domain.entity.User;
 import com.hardziyevich.application.exception.DaoException;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +48,7 @@ public class DaoUserImplTest {
     }
 
     @Test
+    @DisplayName("Create user.")
     void testCreteUser() throws DaoException{
         //given
         User userTest = User.builder()
@@ -67,6 +65,7 @@ public class DaoUserImplTest {
     }
 
     @Test
+    @DisplayName("Find user by email.")
     void testSearchByEmail() throws DaoException {
         //given
         User user = User.builder()
@@ -78,8 +77,38 @@ public class DaoUserImplTest {
                 .type(Role.ADMIN)
                 .build();
         //when
-        List<User> result = daoUserImpl.find(new FindUserByEmailSpecification("myemail@gmail.com"));
+        List<User> result = daoUserImpl.findByEmail("myemail@gmail.com");
         //then
         assertEquals(List.of(user),result);
     }
+
+    @Test
+    @DisplayName("Find user by email that doesn`t exist in database.")
+    void testSearchByEmailNull() throws DaoException {
+        //given
+        List<User> users = new ArrayList<>();
+        //when
+        List<User> result = daoUserImpl.findByEmail("test");
+        //then
+        assertEquals(users,result);
+    }
+
+    @Test
+    @DisplayName("Find user by email and password.")
+    void testSearchByEmailAndPassword() throws DaoException {
+        //given
+        User user = User.builder()
+                .id(BigDecimal.ONE)
+                .firstName("Pasha")
+                .lastName("Hardziyevich")
+                .email("myemail@gmail.com")
+                .password("123456")
+                .type(Role.ADMIN)
+                .build();
+        //when
+        List<User> result = daoUserImpl.findByEmailAndPassword("myemail@gmail.com","123456");
+        //then
+        assertEquals(List.of(user),result);
+    }
+
 }

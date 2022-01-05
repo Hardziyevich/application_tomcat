@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 
-@WebServlet(urlPatterns = {"/registration","/command"})
+@WebServlet(urlPatterns = {"/command"})
 public class MainServlet extends HttpServlet {
 
     private CommandProvider provide = CommandProvider.INSTANCE;

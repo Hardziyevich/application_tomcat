@@ -1,6 +1,5 @@
 package com.hardziyevich.application.dao.impl;
 
-import com.hardziyevich.application.dao.Specification;
 import com.hardziyevich.application.dao.connectionpool.ConnectionPool;
 import com.hardziyevich.application.dao.DaoUser;
 import com.hardziyevich.application.dao.mapper.impl.UserMapperDao;
@@ -13,8 +12,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.hardziyevich.application.dao.impl.SqlRequest.DELIMITER;
 import static com.hardziyevich.application.dao.impl.SqlRequest.Insert.INSERT_TABLE;
 import static com.hardziyevich.application.dao.impl.SqlRequest.Insert.INSERT_VALUE_USER;
+import static com.hardziyevich.application.dao.impl.SqlRequest.Select.*;
 import static com.hardziyevich.application.dao.impl.SqlRequest.Tables.TABLE_USERS;
 
 
@@ -25,6 +26,7 @@ public class DaoUserImpl implements DaoUser {
     private static DaoUser instance;
 
     private final ConnectionPool connectionPool;
+    private final UserMapperDao userMapper = UserMapperDao.getInstance();
 
     DaoUserImpl(ConnectionPool connection) {
         this.connectionPool = connection;
@@ -34,20 +36,12 @@ public class DaoUserImpl implements DaoUser {
     public boolean create(User user) throws DaoException {
         boolean result = false;
         String table = INSERT_TABLE.formatted(TABLE_USERS);
-        StringBuilder builderSql = new StringBuilder();
-        builderSql.append(table).append(INSERT_VALUE_USER);
-        Object[] values = {
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getPassword(),
-                user.getType().toString()
-        };
+        String sql = String.join(DELIMITER, table, INSERT_VALUE_USER);
         try (Connection connection = connectionPool.openConnection();
-             PreparedStatement statement = connection.prepareStatement(builderSql.toString())) {
-            DaoUtil.setStatement(statement,values);
-            statement.executeUpdate();
-            result = statement.getUpdateCount() == 1;
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            DaoUtil.setStatement(preparedStatement, user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword(), user.getType().toString());
+            preparedStatement.executeUpdate();
+            result = preparedStatement.getUpdateCount() == 1;
         } catch (SQLException e) {
             log.warn("Can not create user {}", e.getMessage());
             throw new DaoException(e);
@@ -56,54 +50,48 @@ public class DaoUserImpl implements DaoUser {
     }
 
     @Override
-    public List<User> find(Specification specification) throws DaoException {
-        List<User> users = new ArrayList<>();
-        UserMapperDao userMapper = UserMapperDao.getInstance();
-        try (PreparedStatement preparedStatement = specification.searchFilter(connectionPool)) {
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                users.add(userMapper.mapFrom(resultSet));
-            }
+    public List<User> findByEmail(String email) throws DaoException {
+        List<User> users;
+        String sql = String.join(DELIMITER, SELECT_USERS, SELECT_WHERE, SELECT_USERS_EMAIL);
+        try (Connection connection = connectionPool.openConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            DaoUtil.setStatement(preparedStatement, email);
+            users = getUsers(preparedStatement);
         } catch (SQLException e) {
-            log.warn("Can not search user {}", e.getMessage());
+            log.warn("Can not find user in specification {}", e.getMessage());
+            throw new DaoException(e);
+        }
+        return users;
+    }
+
+    public List<User> findByEmailAndPassword(String email, String password) throws DaoException {
+        List<User> users;
+        String sql = String.join(DELIMITER, SELECT_USERS, SELECT_WHERE, SELECT_USERS_EMAIL, SELECT_AND, SELECT_USERS_PASSWORD);
+        try (Connection connection = connectionPool.openConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            DaoUtil.setStatement(preparedStatement, email,password);
+            users = getUsers(preparedStatement);
+        } catch (SQLException e) {
+            log.warn("Can not find user in specification {}", e.getMessage());
             throw new DaoException(e);
         }
         return users;
     }
 
     public static DaoUser getInstance(ConnectionPool connection) {
-        if(instance == null) {
+        if (instance == null) {
             instance = new DaoUserImpl(connection);
         }
         return instance;
     }
 
-
-    //    public Optional<User> findByEmailAndPassword(String email, String password) {
-//        User user = null;
-//        try (Connection connection = ConnectionPool.INSTANCE.openConnection();
-//             PreparedStatement statement = connection.prepareStatement(FIND_BY_EMAIL_PASSWORD)) {
-//            statement.setString(1,email);
-//            statement.setString(2,password);
-//            ResultSet rs = statement.executeQuery();
-//            if(rs.next()){
-//
-//                user = getUser(rs);
-//            }
-//        } catch (SQLException throwables) {
-//            throwables.printStackTrace();
-//        }
-//        return Optional.ofNullable(user);
-//    }
-
-//    private User getUser(ResultSet rs) throws SQLException {
-//        String type = rs.getString("user_type");
-//        return User.builder()
-//                .firstName(rs.getString("first_name"))
-//                .firstName(rs.getString("last_name"))
-//                .login(rs.getString("login"))
-//                .password(rs.getString("password"))
-//                .type(Role.findRole(type))
-//                .build();
-//    }
+    private List<User> getUsers(PreparedStatement preparedStatement) throws SQLException {
+        List<User> users = new ArrayList<>();
+        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                users.add(userMapper.mapFrom(resultSet));
+            }
+        }
+        return users;
+    }
 }

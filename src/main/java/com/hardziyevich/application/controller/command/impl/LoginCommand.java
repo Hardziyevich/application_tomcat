@@ -1,39 +1,49 @@
-//package com.hardziyevich.application.command.impl;
-//
-//import com.hardziyevich.application.command.Command;
-//import com.hardziyevich.application.service.UserService;
-//import com.hardziyevich.application.service.dto.LoginUserDto;
-//import jakarta.servlet.ServletException;
-//import jakarta.servlet.http.HttpServletRequest;
-//import jakarta.servlet.http.HttpServletResponse;
-//
-//import java.io.IOException;
-//
-//import static com.hardziyevich.application.servlet.ConstantServlet.UrlPath.LOGIN_ERROR_PATH;
-//import static com.hardziyevich.application.servlet.ConstantServlet.UrlPath.RESISTORS_PATH;
-//import static com.hardziyevich.application.servlet.ConstantServlet.UserAttribute.LOGIN;
-//import static com.hardziyevich.application.servlet.ConstantServlet.UserAttribute.PASSWORD;
-//
-//public class LoginCommand implements Command {
-//
-//    private final UserService userService = UserService.getInstance();
-//
-//    @Override
-//    public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        userService.login(req.getParameter(LOGIN), req.getParameter(PASSWORD))
-//                .ifPresentOrElse(
-//                        user -> onLogin(user, req, resp),
-//                        () -> onLoginFail(req, resp)
-//                );
-//    }
-//
-//    private void onLoginFail(HttpServletRequest req, HttpServletResponse resp) {
-//        try {
-//            resp.sendRedirect(LOGIN_ERROR_PATH + req.getParameter(LOGIN));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+package com.hardziyevich.application.controller.command.impl;
+
+import com.hardziyevich.application.controller.command.Command;
+import com.hardziyevich.application.controller.command.Router;
+import com.hardziyevich.application.controller.servlet.Util;
+import com.hardziyevich.application.domain.service.ServiceUser;
+import com.hardziyevich.application.domain.service.ServiceUserFactory;
+import com.hardziyevich.application.domain.service.dto.UserDto;
+import com.hardziyevich.application.exception.ServiceException;
+import jakarta.servlet.http.HttpServletRequest;
+
+import static com.hardziyevich.application.controller.servlet.ConstantProperty.UrlPath.*;
+import static com.hardziyevich.application.controller.servlet.ConstantProperty.UserAttribute.*;
+
+
+public class LoginCommand implements Command {
+
+    private ServiceUser userFactory;
+
+    @Override
+    public Router execute(HttpServletRequest req) {
+        Router result;
+        UserDto userDto = UserDto.builder()
+                .email(req.getParameter(LOGIN))
+                .password(req.getParameter(PASSWORD))
+                .build();
+        try {
+            Router router = Router.REDIRECT;
+            userFactory = ServiceUserFactory.newServiceUser();
+            userFactory.login(userDto).ifPresentOrElse(
+                    user -> {
+                        req.getSession().setAttribute(user.getType(), user);
+                        router.setPagePath(RESISTORS_PATH);
+                    },
+                    () -> {
+                        req.getSession().setAttribute(PARAM_EMAIL,userDto.getEmail());
+                        router.setPagePath(GO_LOGIN_PATH + LOGIN_ERROR_PATH);
+                    }
+            );
+            result = router;
+        } catch (ServiceException e) {
+            result = exceptionHandler(req,e.getMessage());
+        }
+        return result;
+    }
+
 //
 //    private void onLogin(LoginUserDto userDto, HttpServletRequest req, HttpServletResponse resp) {
 //        //TODO set all users
@@ -45,4 +55,4 @@
 //            e.printStackTrace();
 //        }
 //    }
-//}
+}

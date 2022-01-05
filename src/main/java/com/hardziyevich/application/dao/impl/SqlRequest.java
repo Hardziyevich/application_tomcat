@@ -5,6 +5,9 @@ final class SqlRequest {
     private SqlRequest() {
     }
 
+    static final String DELIMITER = "";
+
+
     final static class Insert {
 
         public Insert() {
@@ -19,7 +22,10 @@ final class SqlRequest {
 
     final static class Select {
         static final String SELECT_USERS = "SELECT id, first_name, last_name, email, password, type FROM component.users ";
-        static final String SELECT_USERS_EMAIL = "WHERE email =?";
+        static final String SELECT_USERS_EMAIL = "email=?";
+        static final String SELECT_USERS_PASSWORD = "password=?";
+        static final String SELECT_WHERE = "WHERE ";
+        static final String SELECT_AND = " AND ";
     }
 
     final static class Tables {

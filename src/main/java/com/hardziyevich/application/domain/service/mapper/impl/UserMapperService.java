@@ -1,5 +1,6 @@
 package com.hardziyevich.application.domain.service.mapper.impl;
 
+import com.hardziyevich.application.controller.servlet.Util;
 import com.hardziyevich.application.domain.entity.Role;
 import com.hardziyevich.application.domain.entity.User;
 import com.hardziyevich.application.domain.service.dto.UserDto;
@@ -16,12 +17,11 @@ public class UserMapperService implements MapperService<UserDto, User> {
 
     @Override
     public User mapFrom(UserDto object) {
-        String encodePassword = new String(new Base64().encode(object.getPassword().getBytes(StandardCharsets.UTF_8)));
         return User.builder()
                 .firstName(object.getFirstName())
                 .lastName(object.getLastName())
                 .email(object.getEmail())
-                .password(encodePassword)
+                .password(Util.encode(object.getPassword()))
                 .type(Role.valueOf(object.getType()))
                 .build();
     }

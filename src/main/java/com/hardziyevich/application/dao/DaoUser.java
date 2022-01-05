@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface DaoUser {
     boolean create(User user) throws DaoException;
-    List<User> find(Specification specification) throws DaoException;
+    List<User> findByEmail(String email) throws DaoException;
+    List<User> findByEmailAndPassword(String email, String password) throws DaoException;
 }

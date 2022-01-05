@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public class ErrorCommand implements Command {
     @Override
     public Router execute(HttpServletRequest req){
-        return null;
+        String message = "Command is not find";
+        return exceptionHandler(req,message);
     }
 }
